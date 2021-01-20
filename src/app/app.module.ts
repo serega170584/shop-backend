@@ -11,14 +11,13 @@ import { ProductsComponent } from './products/products.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { TableComponent } from './table/table.component';
-
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductsComponent,
-    TableComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +27,9 @@ import { TableComponent } from './table/table.component';
     MatListModule,
     MatToolbarModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
