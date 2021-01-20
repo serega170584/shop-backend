@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 
 export interface PeriodicElement {
   name: string;
@@ -32,23 +30,19 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ProductsComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource: Object[] = ELEMENT_DATA;
+  dataSource: PeriodicElement[] = ELEMENT_DATA;
   length = 0;
   pageSize = 0;
   pageProducts: Object[] = [];
   pageSizeOptions: number[] = [];
   pageIndex: number = 0;
-  filteredOptions?: Observable<string[]>;
-  formControl: FormControl = new FormControl();
+  formControl!: FormControl;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.filteredOptions = this.formControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+    this.formControl=new FormControl();
+    this.formControl.setValue('');
     this.length = this.dataSource.length;
     let length = this.length;
     this.pageSizeOptions = this.calculatePageSizeOptions(length);
@@ -59,7 +53,7 @@ export class ProductsComponent implements OnInit {
       this.pageSizeOptions = this.pageSizeOptions.slice(1);
     }
     this.pageSize = this.pageSizeOptions[0];
-    this.pageProducts = this.dataSource.slice(this.pageIndex, this.pageSize);
+    this.pageProducts = this.getFilteredDataSource().slice(this.pageIndex, this.pageSize);
   }
 
   calculatePageSizeOptions(length: number): number[] {
@@ -76,6 +70,19 @@ export class ProductsComponent implements OnInit {
   onPage($event: PageEvent): void {
     let fromIndex: number = $event.pageIndex * $event.pageSize;
     let toIndex: number = ($event.pageIndex + 1) * $event.pageSize;
-    this.pageProducts = this.dataSource.slice(fromIndex, toIndex);
+    this.pageProducts = this.getFilteredDataSource().slice(fromIndex, toIndex);
+  }
+
+  onSubmit($event: Event): void {
+    $event.preventDefault();
+    this.formControl.setValue('888888');
+  }
+
+  getFilteredDataSource(): PeriodicElement[] {
+    return this.dataSource.filter(item => this.isProductSearched(item));
+  }
+
+  isProductSearched(item: PeriodicElement): boolean {
+    return item.name.startsWith(this.formControl.value);
   }
 }
