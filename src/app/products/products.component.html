@@ -8,7 +8,7 @@
             [formControl]="formControl">
     </mat-form-field>
 </form>
-<table mat-table [dataSource]="getFilteredDataSource()" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -40,5 +40,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPage($event)">
+<mat-paginator #paginator [pageSizeOptions]="pageSizeOptions">
 </mat-paginator>
