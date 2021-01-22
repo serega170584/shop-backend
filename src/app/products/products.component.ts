@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 export interface PeriodicElement {
   name: string;
@@ -33,12 +34,14 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ProductsComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
   filteredDataSource: PeriodicElement[] = ELEMENT_DATA;
   pageProducts: Object[] = [];
   pageSizeOptions: number[] = [];
@@ -54,6 +57,10 @@ export class ProductsComponent implements OnInit {
   }
 
   onChange(): void {
+    this.dataSource.filter = this.formControl.value;
+    this.dataSource.filterPredicate = (data: PeriodicElement, filter: string) => {
+      return data.name.startsWith(filter);
+    };
     this.pageSizeOptions = this.getPageSizeOptions();
     this.paginator.firstPage();
   }
@@ -71,7 +78,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getPageSizeOptions(): number[] {
-    let length = this.dataSource.data.length;
+    let length = this.dataSource.filteredData.length;
     this.pageSizeOptions = this.getCalculatedPageSizeOptions(length);
     if (length > 2 && this.pageSizeOptions.length == 2) {
       this.pageSizeOptions = [];
@@ -84,10 +91,5 @@ export class ProductsComponent implements OnInit {
 
   onSubmit($event: Event): void {
     $event.preventDefault();
-    this.dataSource.filter = 'Вo';
-    this.dataSource.filterPredicate = (data: PeriodicElement, filter: string) => {
-      // console.log(data);
-      return true;
-    };
   }
 }
