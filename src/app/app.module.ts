@@ -16,6 +16,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatSortModule } from "@angular/material/sort";
+import { MatButtonModule } from '@angular/material/button';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { MatSortModule } from "@angular/material/sort";
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatSortModule
+    MatSortModule,
+    MatButtonModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

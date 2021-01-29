@@ -1,4 +1,30 @@
-<mat-drawer-container class="example-container" style="height: 600px;" [autosize]="true">
+<div *ngIf="token==null"
+    style="position:fixed; top:50%; left:50%; margin:-75px 0 0 -90px;  width:180px; height: 150px;">
+    <form (submit)="onSubmit($event)">
+        <div>
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input type="text" placeholder="Enter name" aria-label="Enter name" matInput
+                    [formControl]="formControl">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input type="password" placeholder="Enter password" aria-label="Enter password"
+                    [formControl]="passwordFormControl" matInput>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-label>Image</mat-label>
+            <input type="file" placeholder="Enter image" aria-label="Enter image" (change)="upload($event)">
+        </div>
+        <div>
+            <button mat-button type="submit">Login</button>
+        </div>
+    </form>
+</div>
+<mat-drawer-container *ngIf="token!=null" style="height: 600px;" [autosize]="true">
     <mat-drawer mode="side" opened style="height: 200px;">
         <mat-nav-list>
             <a mat-list-item [routerLink]="['/']">Products</a>
